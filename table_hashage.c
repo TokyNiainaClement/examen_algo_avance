@@ -1,3 +1,36 @@
+
+/* Redimensionnement (resize + rehash) */
+void redimensionner(TableHashage *table)
+{
+    int ancienne_capacite = table->capacite;
+    Noeud **anciens_buckets = table->buckets;
+
+    int nouvelle_capacite = ancienne_capacite * 2;
+    Noeud **nouveaux_buckets = calloc(nouvelle_capacite, sizeof(Noeud *));
+
+    for (int i = 0; i < ancienne_capacite; i++)
+    {
+        Noeud *noeud = anciens_buckets[i];
+        while (noeud != NULL)
+        {
+            Noeud *suivant = noeud->suivant;
+
+            unsigned int h = etaler_bits(hash_chaine(noeud->cle));
+            int nouvel_indice = indice_bucket(h, nouvelle_capacite);
+
+            noeud->suivant = nouveaux_buckets[nouvel_indice];
+            nouveaux_buckets[nouvel_indice] = noeud;
+
+            noeud = suivant;
+        }
+    }
+
+    free(anciens_buckets);
+    table->buckets = nouveaux_buckets;
+    table->capacite = nouvelle_capacite;
+}
+
+
 /* put (insertion / mise à jour) */
 
 void table_hashage_put(TableHashage *table, const char *cle, int valeur)
