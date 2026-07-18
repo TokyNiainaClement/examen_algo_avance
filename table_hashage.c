@@ -1,3 +1,86 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+/*table_hashage.c*/
+
+#define CAPACITE_INITIALE 8
+#define FACTEUR_CHARGE_MAX 0.75
+
+/* Structures */
+
+typedef struct Noeud
+{
+    char *cle;
+    int valeur;
+    struct Noeud *suivant;
+} Noeud;
+
+/* La table de hachage */
+typedef struct
+{
+    Noeud **buckets;
+    int capacite;
+    int taille;
+} TableHashage;
+
+/* Fonction de hachage */
+
+/* Reproduit hashCode*/
+unsigned int hash_chaine(const char *cle)
+{
+    unsigned int hash = 0;
+    for (int i = 0; cle[i] != '\0'; i++)
+    {
+        hash = 31 * hash + (unsigned char)cle[i];
+    }
+    return hash;
+}
+
+/* Étape de "spreading" */
+unsigned int etaler_bits(unsigned int hash)
+{
+    return hash ^ (hash >> 16);
+}
+
+/* Calcule l'indice du bucket */
+int indice_bucket(unsigned int hash, int capacite)
+{
+    return hash & (capacite - 1);
+}
+
+/* Création / destruction */
+
+TableHashage *creer_table_hashage(void)
+{
+    TableHashage *table = malloc(sizeof(TableHashage));
+    table->capacite = CAPACITE_INITIALE;
+    table->taille = 0;
+ 
+    table->buckets = calloc(table->capacite, sizeof(Noeud *));
+    return table;
+}
+
+void liberer_liste(Noeud *noeud)
+{
+    while (noeud != NULL)
+    {
+        Noeud *suivant = noeud->suivant;
+        free(noeud->cle);
+        free(noeud);
+        noeud = suivant;
+    }
+}
+
+void liberer_table_hashage(TableHashage *table)
+{
+    for (int i = 0; i < table->capacite; i++)
+    {
+        liberer_liste(table->buckets[i]);
+    }
+    free(table->buckets);
+    free(table);
+}
+
 
 /* Redimensionnement (resize + rehash) */
 void redimensionner(TableHashage *table)
