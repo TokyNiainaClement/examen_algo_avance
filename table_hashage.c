@@ -199,3 +199,27 @@ int table_hashage_remove(TableHashage *table, const char *cle)
     }
     return 0;
 }
+
+int main(void)
+{
+    TableHashage *table = creer_table_hashage();
+
+    table_hashage_put(table, "Toky", 25);
+    table_hashage_put(table, "Rina", 30);
+    table_hashage_put(table, "Nouvelle", 22);
+
+    int valeur;
+
+    table_hashage_put(table, "Toky", 26);
+    table_hashage_get(table, "Toky", &valeur);
+    printf("Apres put(\"Toky\", 26) -> get(\"Toky\") = %d\n", valeur);
+
+    table_hashage_remove(table, "Bao");
+
+    table_hashage_put(table, "Ony", 33);
+    table_hashage_put(table, "Nirina", 27);
+    table_hashage_put(table, "Miora", 21);
+
+    liberer_table_hashage(table);
+    return 0;
+}
