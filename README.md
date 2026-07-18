@@ -25,6 +25,3 @@ gcc -o table_hashage table_hashage.c
 Nous n'avons **pas pu réaliser la capture vidéo** de la démonstration du programme comme demandé, en raison d'un problème technique rencontré avec les logiciels d'enregistrement d'écran testés (**Vokoscreen** et **Bandicam**). Malgré plusieurs tentatives, l'enregistrement n'a pas pu être finalisé correctement dans les délais impartis.
 
 Nous restons disponibles pour effectuer une démonstration en direct si nécessaire.
-- Membre 3
-
-*(à compléter avec les noms du groupe)*
